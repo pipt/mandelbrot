@@ -1,4 +1,4 @@
-Mandlebrot Pebble App
+Mandelbrot Pebble App
 =====================
 
 Because why not. You will note this was developed late at night.
