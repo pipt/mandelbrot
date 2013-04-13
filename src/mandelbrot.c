@@ -10,9 +10,26 @@ PBL_APP_INFO(MY_UUID,
              DEFAULT_MENU_ICON,
              APP_INFO_STANDARD_APP);
 
+#define ITERATION_LIMIT 10
+
 Window window;
 
 Layer layer;
+
+int in_set(double initial_x, double initial_y) {
+  double x = 0.0;
+  double y = 0.0;
+
+  int iteration = 0;
+  while (x * x + y * y < 4.0 && iteration < ITERATION_LIMIT) {
+    double new_x = (x * x) - (y * y) + initial_x;
+    y = (2.0 * x * y) + initial_y;
+    x = new_x;
+    iteration++;
+  }
+
+  return iteration == ITERATION_LIMIT;
+}
 
 void mandelbrot_callback(Layer *layer, GContext* ctx) {
   (void)layer;
@@ -25,21 +42,10 @@ void mandelbrot_callback(Layer *layer, GContext* ctx) {
       double x0 = (x * xScale) - 2.5;
       double y0 = (y * yScale) - 1.0;
 
-      double xBlah = 0.0;
-      double yBlah = 0.0;
-
-      int iteration = 0;
-      while((xBlah * xBlah) + (yBlah * yBlah) < 4.0 && iteration < 10) {
-        double xTemp = (xBlah * xBlah) - (yBlah * yBlah) + x0;
-        yBlah = (2.0 * xBlah * yBlah) + y0;
-        xBlah = xTemp;
-        iteration++;
-      }
-
-      if(iteration < 10) {
-        graphics_context_set_stroke_color(ctx, GColorWhite);
-      } else {
+      if(in_set(x0, y0)) {
         graphics_context_set_stroke_color(ctx, GColorBlack);
+      } else {
+        graphics_context_set_stroke_color(ctx, GColorWhite);
       }
 
       graphics_draw_pixel(ctx, GPoint(x, y));
