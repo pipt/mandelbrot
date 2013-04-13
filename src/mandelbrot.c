@@ -37,10 +37,10 @@ void render_region(GContext* ctx, double x_start, double y_start, double x_end, 
 
   for(int x = 0; x < 144; x++) {
     for(int y = 0; y < 168; y++) {
-      double x0 = (x * x_scale) + x_start;
-      double y0 = (y * y_scale) + y_start;
+      double scaled_x = (x * x_scale) + x_start;
+      double scaled_y = (y * y_scale) + y_start;
 
-      if(in_set(x0, y0)) {
+      if(in_set(scaled_x, scaled_y)) {
         graphics_context_set_stroke_color(ctx, GColorBlack);
       } else {
         graphics_context_set_stroke_color(ctx, GColorWhite);
