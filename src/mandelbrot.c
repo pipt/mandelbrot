@@ -31,16 +31,14 @@ int in_set(double initial_x, double initial_y) {
   return iteration == ITERATION_LIMIT;
 }
 
-void mandelbrot_callback(Layer *layer, GContext* ctx) {
-  (void)layer;
-
-  double xScale = 3.5 / 144;
-  double yScale = 2.0 / 168;
+void render_region(GContext* ctx, double x_start, double y_start, double x_end, double y_end) {
+  double x_scale = (x_end - x_start) / 144;
+  double y_scale = (y_end - y_start) / 168;
 
   for(int x = 0; x < 144; x++) {
     for(int y = 0; y < 168; y++) {
-      double x0 = (x * xScale) - 2.5;
-      double y0 = (y * yScale) - 1.0;
+      double x0 = (x * x_scale) + x_start;
+      double y0 = (y * y_scale) + y_start;
 
       if(in_set(x0, y0)) {
         graphics_context_set_stroke_color(ctx, GColorBlack);
@@ -51,6 +49,10 @@ void mandelbrot_callback(Layer *layer, GContext* ctx) {
       graphics_draw_pixel(ctx, GPoint(x, y));
     }
   }
+}
+
+void mandelbrot_callback(Layer *layer, GContext* ctx) {
+  render_region(ctx, -2.5, -2.0, 1.0, 2.0);
 }
 
 void handle_init(AppContextRef ctx) {
